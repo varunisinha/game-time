@@ -17,19 +17,26 @@ tableEl.appendChild(rowEl);
 // Create row for each day
 for(var i=0; i<7; i++){
     rowEl = document.createElement("tr");
+    rowEl.setAttribute("id", "day" + i);
     for(var j=0; j<3; j++){
         var tableDataEl = document.createElement("td");
-        var dateEl = document.createElement("p");
-        var weatherIconEl = document.createElement("img");
-        
-        tableDataEl.appendChild(dateEl);
-        tableDataEl.appendChild(weatherIconEl);
         rowEl.appendChild(tableDataEl);
-        // set ids for first column
+        
         if(j===0){
-            tableDataEl.setAttribute("id", "day" + i);
-            dateEl.setAttribute("id", "date" + i);
-            weatherIconEl.setAttribute("id", "weather" + i);
+            // set create paragraph and image elements for first column; set ids
+            var dateEl = document.createElement("p");
+            var weatherIconEl = document.createElement("img");
+            tableDataEl.appendChild(dateEl);
+            tableDataEl.appendChild(weatherIconEl);
+
+            dateEl.setAttribute("id", "date-day-" + i);
+            weatherIconEl.setAttribute("id", "weather-day-" + i);
+        } else if (j===2){
+            // create text area element for third column; set ids
+            var textAreaEl = document.createElement("textarea");
+            tableDataEl.appendChild(textAreaEl);
+
+            textAreaEl.setAttribute("id", "notes-day-" + i);
         }
     }
     tableEl.appendChild(rowEl);
@@ -75,13 +82,13 @@ function getWeather(url){
             console.log(data);
 
             for (var i=0; i<7; i++){
-                var dateId = "#date" + i;
-                var weatherId = "#weather" + i;
+                var dateId = "#date-day-" + i;
+                var weatherId = "#weather-day-" + i;
                 var dayEl = document.querySelector(dateId);
                 var weatherEl = document.querySelector(weatherId);
+                var dailyDate = getDate(data.daily[i].dt);
                 var icon = "https://openweathermap.org/img/wn/" + data.daily[i].weather[0].icon + ".png";
 
-                dailyDate = getDate(data.daily[i].dt);
                 dayEl.innerHTML = dailyDate.shortWeekday + ", " + dailyDate.monthNum + "/" + dailyDate.day;
                 weatherEl.setAttribute("src", icon);
             }
