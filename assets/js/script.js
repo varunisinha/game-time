@@ -2,6 +2,7 @@ const API_KEY = "0773ca9aaf5c56e841a981221d072a10";
 var tableEl = document.querySelector("table");
 var formEl = document.querySelector("#city-date-form");
 var cityEl = document.querySelector("#city-dropdown");
+var saveButton = document.querySelector(".save-button");
 var city;
 
 var stadiumCoor = {
@@ -27,6 +28,60 @@ var stadiumCoor = {
     }
 }
 
+var events = JSON.parse(localStorage.getItem("events")) || {
+    NewYork: {
+        0: "",
+        1: "",
+        2: "",
+        3: "",
+        4: "",
+        5: "",
+        6: ""
+    },
+    KansasCity: {
+        0: "",
+        1: "",
+        2: "",
+        3: "",
+        4: "",
+        5: "",
+        6: ""
+    },
+    SanFran: {
+        0: "",
+        1: "",
+        2: "",
+        3: "",
+        4: "",
+        5: "",
+        6: ""
+    },
+    Philadelphia: {
+        0: "",
+        1: "",
+        2: "",
+        3: "",
+        4: "",
+        5: "",
+        6: ""
+    },
+    Houston: {
+        0: "",
+        1: "",
+        2: "",
+        3: "",
+        4: "",
+        5: "",
+        6: ""
+    }
+}
+
+// create save button
+var saveButton = document.createElement("button");
+saveButton.innerHTML = "Save";
+formEl.appendChild(saveButton);
+
+saveButton.setAttribute("class", "save-button");
 
 function displayWeatherTable() {
 
@@ -76,6 +131,7 @@ formEl.addEventListener("submit", formSubmit);
 // access data-city for each drop down menu item and use that information to read in api weather
 function formSubmit(event) {
     event.preventDefault();
+    getFromLocalStorage(cityEl.value);
     getLatLon(cityEl.value);
 }
 
@@ -189,6 +245,84 @@ function showMap(lat, lon) {
     // Place a marker on the same location.
     L.marker(mapTarget).addTo(map);
 
+}
+
+// Save to local storage //
+saveButton.addEventListener("click", saveEvents);
+
+function saveEvents(event){
+    event.preventDefault();
+    saveToLocalStorage(cityEl.value);
+}
+
+function saveToLocalStorage(city){
+    if (city === "New York City"){
+        for(var i=0; i < 7; i++){
+            var eventNotesId = "#notes-day-" + i;
+            var eventNotes = document.querySelector(eventNotesId);
+            events.NewYork[i] = eventNotes.value;
+        }
+    } else if (city === "Kansas City"){
+        for(var i=0; i < 7; i++){
+            var eventNotesId = "#notes-day-" + i;
+            var eventNotes = document.querySelector(eventNotesId);
+            events.KansasCity[i] = eventNotes.value;
+        }
+    } else if (city === "San Francisco"){
+        for(var i=0; i < 7; i++){
+            var eventNotesId = "#notes-day-" + i;
+            var eventNotes = document.querySelector(eventNotesId);
+            events.SanFran[i] = eventNotes.value;
+        }
+    } else if (city === "Philadelphia"){
+        for(var i=0; i < 7; i++){
+            var eventNotesId = "#notes-day-" + i;
+            var eventNotes = document.querySelector(eventNotesId);
+            events.Philadelphia[i] = eventNotes.value;
+        }
+    } else if (city === "Houston"){
+        for(var i=0; i < 7; i++){
+            var eventNotesId = "#notes-day-" + i;
+            var eventNotes = document.querySelector(eventNotesId);
+            events.Houston[i] = eventNotes.value;
+        }
+    }
+    localStorage.setItem("events", JSON.stringify(events));
+}
+
+// Get from local storage
+function getFromLocalStorage(city){
+    if (city === "New York City"){
+        for(var i=0; i < 7; i++){
+            var eventNotesId = "#notes-day-" + i;
+            var eventNotes = document.querySelector(eventNotesId);
+            eventNotes.value = events.NewYork[i];
+        }
+    } else if (city === "Kansas City"){
+        for(var i=0; i < 7; i++){
+            var eventNotesId = "#notes-day-" + i;
+            var eventNotes = document.querySelector(eventNotesId);
+            eventNotes.value = events.KansasCity[i];
+        }
+    } else if (city === "San Francisco"){
+        for(var i=0; i < 7; i++){
+            var eventNotesId = "#notes-day-" + i;
+            var eventNotes = document.querySelector(eventNotesId);
+            eventNotes.value = events.SanFran[i];
+        }
+    } else if (city === "Philadelphia"){
+        for(var i=0; i < 7; i++){
+            var eventNotesId = "#notes-day-" + i;
+            var eventNotes = document.querySelector(eventNotesId);
+            eventNotes.value = events.Philadelphia[i];
+        }
+    } else if (city === "Houston"){
+        for(var i=0; i < 7; i++){
+            var eventNotesId = "#notes-day-" + i;
+            var eventNotes = document.querySelector(eventNotesId);
+            eventNotes.value = events.Houston[i];
+        }
+    }
 }
 
 initMap();
