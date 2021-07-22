@@ -8,20 +8,20 @@ var city;
 
 var stadiumCoor = {
     NewYork: {
-        lon: "-73.9262",
-        lat: "40.8296"
+        lon: "-74.0745",
+        lat: "40.8135"
     },
     KansasCity: {
-        lon: "-94.4803",
-        lat: "39.0517"
+        lon: "-94.4839",
+        lat: "39.0489"
     },
     SanFran: {
         lon: "-121.9697",
         lat: "37.4032"
     },
     Philadelphia: {
-        lon: "-75.1901",
-        lat: "39.9502"
+        lon: "-75.1679",
+        lat: "39.9007"
     },
     Houston: {
         lon: "-95.4107",
@@ -143,25 +143,32 @@ function formSubmit(event) {
 
 // Get latitude and longitude of city
 function getLatLon(city) {
-    var url = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + API_KEY;
+    var lat;
+    var lon;
+    if (city === "New York City") {
+        lat = stadiumCoor.NewYork.lat;
+        lon = stadiumCoor.NewYork.lon;
+    } else if (city === "Kansas City") {
+        lat = stadiumCoor.KansasCity.lat;
+        lon = stadiumCoor.KansasCity.lon;
+    } else if (city === "San Francisco") {
+        lat = stadiumCoor.SanFran.lat;
+        lon = stadiumCoor.SanFran.lon;
+    } else if (city === "Philadelphia") {
+        lat = stadiumCoor.Philadelphia.lat;
+        lon = stadiumCoor.Philadelphia.lon;
+    } else if (city === "Houston") {
+        lat = stadiumCoor.Houston.lat;
+        lon = stadiumCoor.Houston.lon;
+    } else {
+        alert("Please choose a city!");
+    }
 
-    fetch(url)
-        .then(function (response) {
-            return response.json();
-        })
-        .then(function (data) {
-            var lat = data.coord.lat;
-            var lon = data.coord.lon;
+    var weatherUrl = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + "&exclude=minutely,hourly,alerts&units=imperial&appid=" + API_KEY;
+    getWeather(weatherUrl);
 
-            var weatherUrl = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + "&exclude=minutely,hourly,alerts&units=imperial&appid=" + API_KEY;
-            getWeather(weatherUrl);
+    showMap(lat, lon);
 
-            showMap(lat, lon);
-        })
-        .catch(function (err) {
-            alert("Please choose a city!");
-            return err;
-        })
 }
 
 // Get and display weather based on lat and lon
