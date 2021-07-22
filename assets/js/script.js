@@ -85,8 +85,8 @@ clearButton.innerHTML = "Clear";
 formEl.appendChild(saveButton);
 formEl.appendChild(clearButton);
 
-saveButton.setAttribute("class", "save-button");
-clearButton.setAttribute("class", "clear-button");
+saveButton.setAttribute("class", "save-button button button-primary");
+clearButton.setAttribute("class", "clear-button button button-primary");
 
 // Create table to display weather
 function displayWeatherTable() {
