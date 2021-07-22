@@ -3,6 +3,7 @@ var tableEl = document.querySelector("table");
 var formEl = document.querySelector("#city-date-form");
 var cityEl = document.querySelector("#city-dropdown");
 var saveButton = document.querySelector(".save-button");
+var clearButton = document.querySelector(".clear-button");
 var city;
 
 var stadiumCoor = {
@@ -76,13 +77,18 @@ var events = JSON.parse(localStorage.getItem("events")) || {
     }
 }
 
-// create save button
+// create save and clear buttons
 var saveButton = document.createElement("button");
+var clearButton = document.createElement("button");
 saveButton.innerHTML = "Save";
+clearButton.innerHTML = "Clear";
 formEl.appendChild(saveButton);
+formEl.appendChild(clearButton);
 
 saveButton.setAttribute("class", "save-button");
+clearButton.setAttribute("class", "clear-button");
 
+// Create table to display weather
 function displayWeatherTable() {
 
     // Create header row
@@ -113,7 +119,7 @@ function displayWeatherTable() {
         weatherIconEl.setAttribute("id", "weather-day-" + i);
         tableDataEl.appendChild(weatherIconEl);
         rowEl.appendChild(tableDataEl);
-       
+
         // Create td and textarea element to display event information
         tableDataEl = document.createElement("td");
         var textAreaEl = document.createElement("textarea");
@@ -250,38 +256,38 @@ function showMap(lat, lon) {
 // Save to local storage //
 saveButton.addEventListener("click", saveEvents);
 
-function saveEvents(event){
+function saveEvents(event) {
     event.preventDefault();
     saveToLocalStorage(cityEl.value);
 }
 
-function saveToLocalStorage(city){
-    if (city === "New York City"){
-        for(var i=0; i < 7; i++){
+function saveToLocalStorage(city) {
+    if (city === "New York City") {
+        for (var i = 0; i < 7; i++) {
             var eventNotesId = "#notes-day-" + i;
             var eventNotes = document.querySelector(eventNotesId);
             events.NewYork[i] = eventNotes.value;
         }
-    } else if (city === "Kansas City"){
-        for(var i=0; i < 7; i++){
+    } else if (city === "Kansas City") {
+        for (var i = 0; i < 7; i++) {
             var eventNotesId = "#notes-day-" + i;
             var eventNotes = document.querySelector(eventNotesId);
             events.KansasCity[i] = eventNotes.value;
         }
-    } else if (city === "San Francisco"){
-        for(var i=0; i < 7; i++){
+    } else if (city === "San Francisco") {
+        for (var i = 0; i < 7; i++) {
             var eventNotesId = "#notes-day-" + i;
             var eventNotes = document.querySelector(eventNotesId);
             events.SanFran[i] = eventNotes.value;
         }
-    } else if (city === "Philadelphia"){
-        for(var i=0; i < 7; i++){
+    } else if (city === "Philadelphia") {
+        for (var i = 0; i < 7; i++) {
             var eventNotesId = "#notes-day-" + i;
             var eventNotes = document.querySelector(eventNotesId);
             events.Philadelphia[i] = eventNotes.value;
         }
-    } else if (city === "Houston"){
-        for(var i=0; i < 7; i++){
+    } else if (city === "Houston") {
+        for (var i = 0; i < 7; i++) {
             var eventNotesId = "#notes-day-" + i;
             var eventNotes = document.querySelector(eventNotesId);
             events.Houston[i] = eventNotes.value;
@@ -291,39 +297,81 @@ function saveToLocalStorage(city){
 }
 
 // Get from local storage
-function getFromLocalStorage(city){
-    if (city === "New York City"){
-        for(var i=0; i < 7; i++){
+function getFromLocalStorage(city) {
+    if (city === "New York City") {
+        for (var i = 0; i < 7; i++) {
             var eventNotesId = "#notes-day-" + i;
             var eventNotes = document.querySelector(eventNotesId);
             eventNotes.value = events.NewYork[i];
         }
-    } else if (city === "Kansas City"){
-        for(var i=0; i < 7; i++){
+    } else if (city === "Kansas City") {
+        for (var i = 0; i < 7; i++) {
             var eventNotesId = "#notes-day-" + i;
             var eventNotes = document.querySelector(eventNotesId);
             eventNotes.value = events.KansasCity[i];
         }
-    } else if (city === "San Francisco"){
-        for(var i=0; i < 7; i++){
+    } else if (city === "San Francisco") {
+        for (var i = 0; i < 7; i++) {
             var eventNotesId = "#notes-day-" + i;
             var eventNotes = document.querySelector(eventNotesId);
             eventNotes.value = events.SanFran[i];
         }
-    } else if (city === "Philadelphia"){
-        for(var i=0; i < 7; i++){
+    } else if (city === "Philadelphia") {
+        for (var i = 0; i < 7; i++) {
             var eventNotesId = "#notes-day-" + i;
             var eventNotes = document.querySelector(eventNotesId);
             eventNotes.value = events.Philadelphia[i];
         }
-    } else if (city === "Houston"){
-        for(var i=0; i < 7; i++){
+    } else if (city === "Houston") {
+        for (var i = 0; i < 7; i++) {
             var eventNotesId = "#notes-day-" + i;
             var eventNotes = document.querySelector(eventNotesId);
             eventNotes.value = events.Houston[i];
         }
     }
 }
+
+clearButton.addEventListener("click", function (event) {
+    event.preventDefault();
+
+    if (cityEl.value === "New York City") {
+        for (var i = 0; i < 7; i++) {
+            var eventNotesId = "#notes-day-" + i;
+            var eventNotes = document.querySelector(eventNotesId);
+            events.NewYork[i] = "";
+            eventNotes.value = "";
+        }
+    } else if (cityEl.value === "Kansas City") {
+        for (var i = 0; i < 7; i++) {
+            var eventNotesId = "#notes-day-" + i;
+            var eventNotes = document.querySelector(eventNotesId);
+            events.KansasCity[i] = "";
+            eventNotes.value = "";
+        }
+    } else if (cityEl.value === "San Francisco") {
+        for (var i = 0; i < 7; i++) {
+            var eventNotesId = "#notes-day-" + i;
+            var eventNotes = document.querySelector(eventNotesId);
+            events.SanFran[i] = "";
+            eventNotes.value = "";
+        }
+    } else if (cityEl.value === "Philadelphia") {
+        for (var i = 0; i < 7; i++) {
+            var eventNotesId = "#notes-day-" + i;
+            var eventNotes = document.querySelector(eventNotesId);
+            events.Philadelphia[i] = "";
+            eventNotes.value = "";
+        }
+    } else if (cityEl.value === "Houston") {
+        for (var i = 0; i < 7; i++) {
+            var eventNotesId = "#notes-day-" + i;
+            var eventNotes = document.querySelector(eventNotesId);
+            events.Houston[i] = "";
+            eventNotes.value = "";
+        }
+    }
+    localStorage.setItem("events", JSON.stringify(events));
+});
 
 initMap();
 displayWeatherTable();
