@@ -6,44 +6,68 @@
   <!-- <meta name="viewport" content="width=device-width, initial scale=1.0"> -->
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/css/skeleton.css"/>
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="assets/css/skeleton.css" />
   <link rel="stylesheet" href="assets/css/style.css">
   <title>Game Time Event Scheduler</title>
 </head>
 
 <body>
 
-  <h1>Game Time</h1>
+  <h1 class="page-heading">Game Time</h1>
 
   <p>Select a date and venue for the event you want to schedule by filling out the form: </p>
-
 
   <form id="city-date-form">
     <select id="city-dropdown" class="input">
       <option>Select a venue</option>
-      <option>New York City</option>
-      <option>Kansas City</option>
-      <option>San Francisco</option>
-      <option>Philadelphia</option>
-      <option>Houston</option>
     </select>
-    <button class="submit button button-primary" type="submit">View events</button>
+
+    <button id="btn-save" class="save-button button button-primary">Save</button>
+    <button id="btn-clear" class="clear-button button button-warning">Clear</button>
   </form>
 
-  <div class="container">
+  <div class="panel-container">
     <div class="panel-left">
       <table class="event-table">
-
       </table>
     </div>
     <div class="panel-right">
       <!-- Added from online -->
-      <div id="osm-map"></div>
+      <div id="event-title">Select a stadium</div>
+      <div id="osm-map" style="z-index:0;"></div>
+      <div class="giph-panel">
+        <div id="giph-view"></div>
+      </div>
     </div>
   </div>
+
+ <!----------- All jQuery UI dialog elements --------------------->
+  <div id="dialog-confirm" title="Confirm Clear Events?" style="display: none;z-index: 99999;">
+    <p><span class="ui-icon ui-icon-alert" 
+      style="float:left; margin:12px 12px 20px 0;"></span>
+      Are you sure to clear all events for the selected venue?</p>
+  </div>
+ 
+  <div id="dialog-alert" title="Select a Venue" style="display: none;z-index: 99999;">
+    <p><span class="ui-icon ui-icon-alert" 
+      style="float:left; margin:12px 12px 20px 0;"></span>
+      Please select a venue</p>
+  </div>
+ <!--------------------------------------------------------------->
+
   <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
 
-  <script src="assets/js/script.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
+  
+  <script src="assets/js/data-stadium.js"></script>
+  <script src="assets/js/giph.js"></script>
+  <script src="assets/js/map.js"></script>
+  <script src="assets/js/weather.js"></script>
+  <script src="assets/js/events.js"></script>
+  <script src="assets/js/main.js"></script>
 </body>
 
 </html>
