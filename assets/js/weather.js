@@ -5,7 +5,7 @@ function displayWeatherTable() {
 
     // Create header row
     var rowEl = document.createElement("tr");
-    var headers = ["Date", "Weather", "Event"];
+    var headers = ["Date <br>[starting today]", "Weather", "Event"];
     for (var i = 0; i < headers.length; i++) {
         var tableHeadEl = document.createElement("th");
         tableHeadEl.innerHTML = headers[i];

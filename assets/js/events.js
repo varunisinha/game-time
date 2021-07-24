@@ -37,6 +37,8 @@ function getFromLocalStorage(city) {
     }
 }
 
+// It's saving the events not at the index, but at the date, and so when we clear, it will clear the
+// text areas, but it still shows up when we return to the city
 function clearVenueEvents() {
     var stadiumEvents = eventsList[cityEl.value];
     for (var i = 0; i < 7; i++) {
