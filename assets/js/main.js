@@ -20,7 +20,7 @@ function loadStadiumData(event) {
 }
 
 // Fetch weather data 
-cityEl.addEventListener("change", loadStadiumData);
+cityEl.addEventListener("change", loadStadiumData); // it's not registering the first change
 
 // Save to local storage 
 saveButton.addEventListener("click", function (event) {

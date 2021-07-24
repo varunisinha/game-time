@@ -45,7 +45,7 @@ function clearVenueEvents() {
         var eventNotes = document.querySelector(eventNotesId);
         var eventDateEl = document.querySelector("#date-day-" + i);
         var eventDate = eventDateEl.getAttribute("data-date");
-        stadiumEvents[eventDate] = "";
+        delete stadiumEvents[eventDate];
         eventNotes.value = "";
     }
     localStorage.setItem("eventsList", JSON.stringify(eventsList));
