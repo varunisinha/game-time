@@ -37,14 +37,15 @@ function getFromLocalStorage(city) {
     }
 }
 
-// It's saving the events not at the index, but at the date, and so when we clear, it will clear the
-// text areas, but it still shows up when we return to the city
+// Now, it's clearing properly, but when we refresh the page, it's not automatically displaying
 function clearVenueEvents() {
     var stadiumEvents = eventsList[cityEl.value];
     for (var i = 0; i < 7; i++) {
         var eventNotesId = "#notes-day-" + i;
         var eventNotes = document.querySelector(eventNotesId);
-        stadiumEvents[i] = "";
+        var eventDateEl = document.querySelector("#date-day-" + i);
+        var eventDate = eventDateEl.getAttribute("data-date");
+        stadiumEvents[eventDate] = "";
         eventNotes.value = "";
     }
     localStorage.setItem("eventsList", JSON.stringify(eventsList));
