@@ -13,8 +13,13 @@ function displayWeatherTable() {
     }
     tableEl.appendChild(rowEl);
 
+    // Start Date
+    var dailyDate = new Date();
+
     // Create row for each day
     for (var i = 0; i < 7; i++) {
+        dailyDate.setDate(dailyDate.getDate() + i);
+
         rowEl = document.createElement("tr");
         rowEl.setAttribute("id", "day" + i);
 
@@ -22,6 +27,8 @@ function displayWeatherTable() {
         var tableDataEl = document.createElement("td");
         var dateEl = document.createElement("span");
         dateEl.setAttribute("id", "date-day-" + i);
+        dateEl.innerHTML = formatDateForDisplay(dailyDate); 
+
         tableDataEl.appendChild(dateEl);
         rowEl.appendChild(tableDataEl);
 
@@ -43,43 +50,18 @@ function displayWeatherTable() {
     }
 }
 
-// Get latitude and longitude of city
-function getLatLon(stadium) {
-    var lat;
-    var lon;
+// Use the latitude and longitude from the stadium object to fetch the weather details for the location
+function displayWeatherDetails(stadium, fnAfterWeatherLoad) {
     if (stadium != null) {
-        lat = stadium.lat;
-        lon = stadium.lon;
-    } else {
-
-        $("#dialog-alert").dialog({
-            resizable: false,
-            height: "auto",
-            width: 340,
-            modal: true,
-            buttons: {
-                "Ok": function () {
-                    $(this).dialog("close");
-                }
-            },
-            open: function (event, ui) {
-                $(event.target).parent().css('position', 'fixed');
-                $(event.target).parent().css('top', '5px');
-                var winWidth = $(window).width() / 2 - 250;
-                $(event.target).parent().css('left', winWidth);
-            }
-        });
-        $("#dialog-confirm").dialog("open");
+        var weatherBaseUrl = "https://api.openweathermap.org/data/2.5/onecall?" +
+            "&exclude=minutely,hourly,alerts&units=imperial&appid=" + WEATHER_API_KEY;
+        var weatherUrl = weatherBaseUrl + "&lat=" + stadium.lat + "&lon=" + stadium.lon;
+        getWeather(weatherUrl, fnAfterWeatherLoad);
     }
-
-    var weatherUrl = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon 
-        + "&exclude=minutely,hourly,alerts&units=imperial&appid=" + WEATHER_API_KEY;
-    getWeather(weatherUrl);
-    showMap(lat, lon);
 }
 
 // Get and display weather based on lat and lon
-function getWeather(url) {
+function getWeather(url, fnAfterWeatherLoad) {
     fetch(url)
         .then(function (response) {
             return response.json();
@@ -92,43 +74,22 @@ function getWeather(url) {
                 var weatherId = "#weather-day-" + i;
                 var dayEl = document.querySelector(dateId);
                 var weatherEl = document.querySelector(weatherId);
-                var dailyDate = getDate(data.daily[i].dt);
+                var dailyDate = converToDateFromUnix(data.daily[i].dt);
+
                 var icon = "https://openweathermap.org/img/wn/" + data.daily[i].weather[0].icon + ".png";
 
-                var formattedDate = dailyDate.year + "/" + dailyDate.monthNum + "/" + dailyDate.day;
-                var formattedDisplayDate = dailyDate.shortWeekday + ", " + dailyDate.monthNum + "/" + dailyDate.day;
-                dayEl.setAttribute("data-date", formattedDate);
+                var formattedDate = formatDateToYMD(dailyDate);
+                var formattedDisplayDate = formatDateForDisplay(dailyDate);
 
+                dayEl.setAttribute("data-date", formattedDate);
                 dayEl.innerHTML = formattedDisplayDate;
                 weatherEl.setAttribute("src", icon);
             }
-        })
-}
 
-// Read in unix date and return standard date
-function getDate(unix) {
-    var timeStamp = unix * 1000;
-    var date = new Date(timeStamp);
-
-    var dateObj = {
-        shortWeekday: date.toLocaleString("en-US", {
-            weekday: "short"
-        }),
-        longWeekday: date.toLocaleString("en-US", {
-            weekday: "long"
-        }),
-        monthName: date.toLocaleString("en-US", {
-            month: "long"
-        }),
-        monthNum: date.toLocaleString("en-US", {
-            month: "numeric"
-        }),
-        day: date.toLocaleString("en-US", {
-            day: "numeric"
-        }),
-        year: date.toLocaleString("en-US", {
-            year: "numeric"
+            // If function to execute after the weather details are fetched isnot empty
+            // execute/call that function
+            if (fnAfterWeatherLoad) {
+                fnAfterWeatherLoad();
+            }
         })
-    };
-    return dateObj;
 }
