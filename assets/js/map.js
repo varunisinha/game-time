@@ -1,6 +1,6 @@
 //Map object 
 var map = null;
-var mapTarget = null;
+var mapMarker = null;
 
 function initMap() {
     // Where you want to render the map.
@@ -18,23 +18,23 @@ function initMap() {
     }).addTo(map);
 
     // Target's GPS coordinates.
-    mapTarget = L.latLng(stadiumCoor.NewYork.lat, stadiumCoor.NewYork.lon);
+    var mapTarget = L.latLng(stadiumCoor.NewYork.lat, stadiumCoor.NewYork.lon);
 
     // Set map's center to target with zoom 14.
     map.setView(mapTarget, 14);
-
 }
 
-function showMap(lat, lon) {
+function showMap(lat, lon, desc) {
     //Remove the previously added marker
-    if (mapTarget != null) {
-        L.marker(mapTarget).remove(map);
+    if (mapMarker != null) {
+        L.marker(mapMarker).remove(map);
     }
     // Target's GPS coordinates.
-    mapTarget = L.latLng(lat, lon);
+   var  mapTarget = L.latLng(lat, lon);
     // Set map's center to target with zoom 14.
     map.setView(mapTarget, 14);
     // Place a marker on the same location.
-    L.marker(mapTarget).addTo(map);
+    mapMarker = L.marker(mapTarget).addTo(map);
+    if (desc) mapMarker.bindPopup(desc).openPopup();
 
 }

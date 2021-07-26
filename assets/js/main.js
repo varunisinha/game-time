@@ -5,27 +5,54 @@ var saveButton = document.getElementById("btn-save");
 var clearButton = document.getElementById("btn-clear");
 var stadiumTitleEl = document.querySelector("#event-title");
 
-var city;
 var eventsList = null;
 
-// create save and clear buttons 
-
 // access data-city for each drop down menu item and use that information to read in api weather
-function loadStadiumData(event) {
-    event.preventDefault();
-    getFromLocalStorage(cityEl.value);
-    var stadium = stadiumCoor[cityEl.value];
-    getLatLon(stadium);
-    stadiumTitleEl.innerHTML = stadium.stadiumName;
+function loadStadiumData(stadium) {
+    // If no stadium/city is selected alert the user without continuing
+    if (stadium != null) {
+        loadEventsFromLocalStorage();
+        showMap(stadium.lat, stadium.lon, stadium.description);
+        stadiumTitleEl.innerHTML = stadium.stadiumName;
+        displayWeatherDetails(stadium, function () {
+            displayEventDetails(cityEl.value);
+        });
+    }
 }
 
+// Event handler for stadium dropdown change
+function onStadiumCityChange(event) {
+    event.preventDefault();
+    var stadium = stadiumCoor[cityEl.value];
+    // If no stadium/city is selected alert the user without continuing
+    if (stadium == null) {
+        // Show message to the user
+        showMessage("Please select a venue");
+
+        // Clear the weather data for any previously selected stadium
+        clearWeatherTable();
+
+        // Disable buttons        
+        saveButton.setAttribute("disabled", "true");
+        clearButton.setAttribute("disabled", "true");
+
+        // Return from the function if no staidum is selected
+        return;
+    } else {
+        // Enable buttons
+        saveButton.removeAttribute("disabled");
+        clearButton.removeAttribute("disabled");
+    }
+    loadStadiumData(stadium);
+}
 // Fetch weather data 
-cityEl.addEventListener("change", loadStadiumData); // it's not registering the first change
+cityEl.addEventListener("change", onStadiumCityChange); // it's not registering the first change
 
 // Save to local storage 
 saveButton.addEventListener("click", function (event) {
     event.preventDefault();
     saveToLocalStorage(cityEl.value);
+    showMessage("Successfully saved the events");
 });
 
 // Clear button event handler

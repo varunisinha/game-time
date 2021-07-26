@@ -1,3 +1,4 @@
+// Function to save the event details for the selected city
 function saveToLocalStorage(city) {
     var stadiumEvents = eventsList[city];
     for (var i = 0; i < 7; i++) {
@@ -9,23 +10,27 @@ function saveToLocalStorage(city) {
         if (eventNotes.trim() != "") {
             stadiumEvents[eventDate] = eventNotes;
         }
+        else {
+            //Remove the property from the JSON object if it was not empty before
+          delete  stadiumEvents[eventDate];
+        }
     }
     localStorage.setItem("eventsList", JSON.stringify(eventsList));
 }
 
-function getEmptyEventsList() {
+// Function to load event data from local storage
+function loadEventsFromLocalStorage()
+{
     var emptyEventsList = {};
     for (var stadiumKey in stadiumCoor) {
         emptyEventsList[stadiumKey] = {}
     }
-    return emptyEventsList;
+    eventsList = JSON.parse(localStorage.getItem("eventsList")) || emptyEventsList;
 }
 
-// Get from local storage
-function getFromLocalStorage(city) {
-    eventsList = JSON.parse(localStorage.getItem("eventsList")) || getEmptyEventsList();
-
-    var cityEvents = eventsList[city];
+// Function to display the event details to the table fields
+function displayEventDetails(city) {
+     var cityEvents = eventsList[city];
     if (cityEvents) {
         for (var i = 0; i < 7; i++) {
             var eventDateEl = document.querySelector("#date-day-" + i);
@@ -37,16 +42,22 @@ function getFromLocalStorage(city) {
     }
 }
 
-// Now, it's clearing properly, but when we refresh the page, it's not automatically displaying
-function clearVenueEvents() {
-    var stadiumEvents = eventsList[cityEl.value];
+// Function to just clear the fields in the table
+function clearWeatherTable() {
     for (var i = 0; i < 7; i++) {
         var eventNotesId = "#notes-day-" + i;
+        var weatherId = "#weather-day-" + i;
         var eventNotes = document.querySelector(eventNotesId);
-        var eventDateEl = document.querySelector("#date-day-" + i);
-        var eventDate = eventDateEl.getAttribute("data-date");
-        delete stadiumEvents[eventDate];
+        var weatherEl = document.querySelector(weatherId);
         eventNotes.value = "";
+        weatherEl.setAttribute("src", "");
     }
-    localStorage.setItem("eventsList", JSON.stringify(eventsList));
+}
+
+// Function to clear the fields for the selected stadium/cityand save the data and reload it.
+function clearVenueEvents() {
+    clearWeatherTable();
+    saveToLocalStorage(cityEl.value);
+    var stadium = stadiumCoor[cityEl.value]; 
+    loadStadiumData(stadium);
 }
